@@ -1,0 +1,100 @@
+#!/bin/zsh
+
+# The name of the tmux session
+SESSION_NAME="master"
+
+# Check if the tmux session already exists
+tmux has-session -t $SESSION_NAME 2>/dev/null
+
+# $? is the exit status of the last command.
+# If the session exists, `tmux has-session` will return 0.
+if [ $? -eq 0 ]; then
+  # Attach to the existing session
+  tmux attach-session -t $SESSION_NAME
+else
+  # Create a new session, and name the first window "Home"
+  tmux new-session -d -s $SESSION_NAME -n "Home" -c "$HOME"
+  # Create a new window for each project directory
+  PROJECTS_DIR="$HOME/Projects"
+  
+  for dir in "$PROJECTS_DIR"/*; do
+    if [ -d "$dir" ]; then
+      # Skip directories that contain a .no-tmux file
+      if [ -f "$dir/.no-tmux" ]; then
+        continue
+      fi
+      WINDOW_NAME=$(basename "$dir")
+      # Create a new window for each directory and open a shell
+      tmux new-window -n "$WINDOW_NAME" -c "$dir"
+    fi
+  done
+
+  # Create a new window for the downloads directory
+  tmux new-window -n "Downloads" -c "$HOME/Downloads"
+
+  # Trick: Attach *briefly* to sync size, then detach
+  tmux attach-session -t $SESSION_NAME \; detach-client
+
+  tmux display-message -p "#{window_layout}"
+
+  sleep 1
+
+  # Create Home window panes first, then apply layout
+  tmux select-window -t "${SESSION_NAME}:0"
+  
+  # STEP 1: Split bottom area
+  tmux split-window -t "${SESSION_NAME}:0" -v -p 20
+
+  # STEP 2: Split remaining top area: left (gemini) + right column
+  tmux split-window -t "${SESSION_NAME}:0.0" -h -p 50
+
+  # STEP 3: On right column, split bottom area
+  tmux split-window -t "${SESSION_NAME}:0.1" -v -p 40
+
+  # Now apply the specific layout to the Home window (4 panes)
+  tmux select-layout -t "${SESSION_NAME}:0" "0df9,362x93,0,0[362x69,0,0{180x69,0,0,4658,181x69,181,0[181x35,181,0,4673,181x33,181,36,4674]},362x23,0,70,4672]"
+
+  # Run commands in the Home window panes
+  tmux send-keys -t "${SESSION_NAME}:0.0" "codex" C-m
+  tmux send-keys -t "${SESSION_NAME}:0.2" "htop" C-m
+
+  # Reset window index for the second loop
+  WINDOW_INDEX=1
+  
+  for dir in "$PROJECTS_DIR"/*; do
+    if [ -d "$dir" ]; then
+      # Skip directories that contain a .no-tmux file
+      if [ -f "$dir/.no-tmux" ]; then
+        continue
+      fi
+      WINDOW_NAME=$(basename "$dir")
+
+      tmux select-window -t "${SESSION_NAME}:${WINDOW_INDEX}"
+      sleep 0.05  # Let tmux settle
+
+      # Create project directory window panes first
+      # Split the window vertically using the tracked window index
+      tmux split-window -t "${SESSION_NAME}:${WINDOW_INDEX}" -v -p 20 -c "$dir"
+      
+      # Split the window horizontally using the tracked window index
+      tmux split-window -t "${SESSION_NAME}:${WINDOW_INDEX}.0" -h -p 50 -c "$dir"
+
+      # Now apply the specific layout to the project directory window (3 panes)
+      tmux select-layout -t "${SESSION_NAME}:${WINDOW_INDEX}" "7536,362x93,0,0[362x69,0,0{180x69,0,0,4659,181x69,181,0,4676},362x23,0,70,4675]"
+
+      # Send keys using the tracked window index
+      tmux send-keys -t "${SESSION_NAME}:${WINDOW_INDEX}.1" "codex" C-m
+      
+      # Increment the window index for the next iteration
+      ((WINDOW_INDEX++))
+    fi
+  done
+
+  # Select window 0 and pane 0
+  tmux select-window -t "${SESSION_NAME}:0"
+  tmux select-pane -t "${SESSION_NAME}:0.1"
+
+  # Attach to the new session
+  tmux attach-session -t $SESSION_NAME
+
+fi

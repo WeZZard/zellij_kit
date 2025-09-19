@@ -1,0 +1,188 @@
+#!/bin/bash
+
+# zellij-workspace - Open a new zellij tab with workspace layout in specified directory
+# Usage: zellij-workspace [--layout regular|compact] [working_directory]
+# Options:
+#   --layout regular|compact  Choose workspace layout (default: compact)
+# Examples:
+#   zellij-workspace                    # Use compact layout in current directory
+#   zellij-workspace --layout regular   # Use regular layout in current directory
+#   zellij-workspace /path/to/project   # Use compact layout in specified directory
+#   zellij-workspace --layout regular /path/to/project  # Use regular layout in specified directory
+
+set -euo pipefail
+
+# Default layout directory
+ZJ_LAYOUT_DIR="${ZJ_LAYOUT_DIR:-$HOME/zellij_kit/layouts}"
+
+# Function to determine the workspace layout based on type
+get_workspace_layout() {
+    local layout_type="${1:-compact}"  # Default to compact
+    local regular_layout="${ZJ_LAYOUT_DIR}/regular-workspace-layout.kdl"
+    local compact_layout="${ZJ_LAYOUT_DIR}/compact-workspace-layout.kdl"
+    
+    case "${layout_type}" in
+        "regular")
+            if [[ -f "${regular_layout}" ]]; then
+                echo "${regular_layout}"
+            else
+                echo ""
+            fi
+            ;;
+        "compact")
+            if [[ -f "${compact_layout}" ]]; then
+                echo "${compact_layout}"
+            else
+                echo ""
+            fi
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+# LAYOUT_PATH will be determined based on command line arguments
+
+# Early check for help option (before zellij session check)
+for arg in "$@"; do
+    if [[ "$arg" == "--help" ]] || [[ "$arg" == "-h" ]]; then
+        show_help() {
+            echo "Usage: zellij-workspace [--layout regular|compact] [working_directory]"
+            echo ""
+            echo "Options:"
+            echo "  --layout regular|compact  Choose workspace layout (default: compact)"
+            echo "  --help                    Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  zellij-workspace                       # Open current directory with compact layout"
+            echo "  zellij-workspace --layout regular      # Open current directory with regular layout"
+            echo "  zellij-workspace /path/to/project      # Open specific directory with compact layout"
+            echo "  zellij-workspace --layout regular /path/to/project  # Open specific directory with regular layout"
+        }
+        show_help
+        exit 0
+    fi
+done
+
+# Check if zellij is installed
+if ! command -v zellij &> /dev/null; then
+    echo "Error: zellij is not installed or not in PATH"
+    exit 1
+fi
+
+# Check if we're inside a zellij session
+if [[ -z "${ZELLIJ:-}" ]]; then
+    echo "Error: This command must be run inside a zellij session"
+    echo "Use '$0' to create/attach to a session first"
+    exit 1
+fi
+
+# Function to open new tab with layout
+open_tab_with_layout() {
+    local working_dir="$1"
+    local tab_name
+    
+    if [[ -z "${LAYOUT_PATH}" ]] || [[ ! -f "${LAYOUT_PATH}" ]]; then
+        echo "Error: No workspace layout found in ${ZJ_LAYOUT_DIR}"
+        echo "Expected one of: desktop-workspace-layout.kdl, mobile-workspace-layout.kdl"
+        exit 1
+    fi
+    
+    # Determine the directory to use for tab naming
+    if [[ -n "${working_dir}" ]] && [[ -d "${working_dir}" ]]; then
+        # Use the last component of the provided directory
+        tab_name=$(basename "${working_dir}")
+    else
+        # Use the last component of current PWD
+        tab_name=$(basename "${PWD}")
+    fi
+    
+    # Change to the specified working directory if provided and valid
+    if [[ -n "${working_dir}" ]] && [[ -d "${working_dir}" ]]; then
+        echo "Opening new tab '${tab_name}' in directory: ${working_dir}"
+        zellij action new-tab --layout "${LAYOUT_PATH}" --cwd "${working_dir}" --name "${tab_name}"
+    else
+        echo "Opening new tab '${tab_name}' in current directory"
+        zellij action new-tab --layout "${LAYOUT_PATH}" --name "${tab_name}"
+    fi
+}
+
+# Function to show help
+show_help() {
+    echo "Usage: zellij-workspace [--layout regular|compact] [working_directory]"
+    echo ""
+    echo "Options:"
+    echo "  --layout regular|compact  Choose workspace layout (default: compact)"
+    echo "  --help                    Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  zellij-workspace                       # Open current directory with compact layout"
+    echo "  zellij-workspace --layout regular      # Open current directory with regular layout"
+    echo "  zellij-workspace /path/to/project      # Open specific directory with compact layout"
+    echo "  zellij-workspace --layout regular /path/to/project  # Open specific directory with regular layout"
+}
+
+# Main function
+main() {
+    local layout_type="compact"  # Default to compact
+    local working_dir=""
+    
+    # Parse command line arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --layout)
+                if [[ -n "${2:-}" ]] && [[ "$2" =~ ^(regular|compact)$ ]]; then
+                    layout_type="$2"
+                    shift 2
+                else
+                    echo "Error: --layout requires 'regular' or 'compact' as argument"
+                    show_help
+                    exit 1
+                fi
+                ;;
+            --help|-h)
+                show_help
+                exit 0
+                ;;
+            -*)
+                echo "Error: Unknown option $1"
+                show_help
+                exit 1
+                ;;
+            *)
+                # This should be the working directory
+                if [[ -z "${working_dir}" ]]; then
+                    working_dir="$1"
+                else
+                    echo "Error: Multiple directories specified"
+                    show_help
+                    exit 1
+                fi
+                shift
+                ;;
+        esac
+    done
+    
+    # Get the layout path based on the selected type
+    LAYOUT_PATH=$(get_workspace_layout "${layout_type}")
+    
+    if [[ -z "${LAYOUT_PATH}" ]] || [[ ! -f "${LAYOUT_PATH}" ]]; then
+        echo "Error: ${layout_type} workspace layout not found in ${ZJ_LAYOUT_DIR}"
+        echo "Expected file: ${layout_type}-workspace-layout.kdl"
+        exit 1
+    fi
+    
+    # If working directory is provided and it's a directory, use it
+    if [[ -n "${working_dir}" ]] && [[ -d "${working_dir}" ]]; then
+        open_tab_with_layout "${working_dir}"
+    elif [[ -n "${working_dir}" ]]; then
+        echo "Error: Directory not found: ${working_dir}"
+        exit 1
+    else
+        # Otherwise, use current directory
+        open_tab_with_layout ""
+    fi
+}
+
+main "$@"
