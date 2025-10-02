@@ -16,8 +16,11 @@ layout {
       pane name="Shell" {
         command "zsh"
 			}
-      pane expanded=true name="Claude" {
+      pane name="Claude" {
         command "claude"
+      }
+      pane expanded=true name="Codex" {
+        command "codex"
       }
     }
     floating_panes {

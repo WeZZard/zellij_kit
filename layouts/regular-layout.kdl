@@ -17,6 +17,9 @@ layout {
         pane                name="Claude" {
 					command "claude"
 				}
+        pane                name="Codex" {
+					command "codex"
+				}
       }
       pane name="Explorer" stacked=true {
         pane expanded=true name="Yazi" {
