@@ -3,11 +3,14 @@
 # zellij-workspace - Open a new zellij tab with workspace layout in specified directory
 # Usage: zellij-workspace [--layout regular|compact] [working_directory]
 # Options:
-#   --layout regular|compact  Choose workspace layout (default: compact)
+#   --layout regular|compact  Choose workspace layout (default: from ZK_DEFAULT_LAYOUT env var or compact)
+# Environment Variables:
+#   ZK_DEFAULT_LAYOUT     Set default layout type (regular|compact, default: compact)
 # Examples:
-#   zellij-workspace                    # Use compact layout in current directory
+#   zellij-workspace                    # Use default layout in current directory
 #   zellij-workspace --layout regular   # Use regular layout in current directory
-#   zellij-workspace /path/to/project   # Use compact layout in specified directory
+#   ZK_DEFAULT_LAYOUT=regular zellij-workspace  # Use regular as default layout
+#   zellij-workspace /path/to/project   # Use default layout in specified directory
 #   zellij-workspace --layout regular /path/to/project  # Use regular layout in specified directory
 
 set -euo pipefail
@@ -51,13 +54,17 @@ for arg in "$@"; do
             echo "Usage: zellij-workspace [--layout regular|compact] [working_directory]"
             echo ""
             echo "Options:"
-            echo "  --layout regular|compact  Choose workspace layout (default: compact)"
+            echo "  --layout regular|compact  Choose workspace layout (default: from ZK_DEFAULT_LAYOUT env var or compact)"
             echo "  --help                    Show this help message"
             echo ""
+            echo "Environment Variables:"
+            echo "  ZK_DEFAULT_LAYOUT     Set default layout type (regular|compact, default: compact)"
+            echo ""
             echo "Examples:"
-            echo "  zellij-workspace                       # Open current directory with compact layout"
+            echo "  zellij-workspace                       # Open current directory with default layout"
             echo "  zellij-workspace --layout regular      # Open current directory with regular layout"
-            echo "  zellij-workspace /path/to/project      # Open specific directory with compact layout"
+            echo "  ZK_DEFAULT_LAYOUT=regular zellij-workspace  # Use regular as default layout"
+            echo "  zellij-workspace /path/to/project      # Open specific directory with default layout"
             echo "  zellij-workspace --layout regular /path/to/project  # Open specific directory with regular layout"
         }
         show_help
@@ -113,19 +120,24 @@ show_help() {
     echo "Usage: zellij-workspace [--layout regular|compact] [working_directory]"
     echo ""
     echo "Options:"
-    echo "  --layout regular|compact  Choose workspace layout (default: compact)"
+    echo "  --layout regular|compact  Choose workspace layout (default: from ZK_DEFAULT_LAYOUT env var or compact)"
     echo "  --help                    Show this help message"
     echo ""
+    echo "Environment Variables:"
+    echo "  ZK_DEFAULT_LAYOUT     Set default layout type (regular|compact, default: compact)"
+    echo ""
     echo "Examples:"
-    echo "  zellij-workspace                       # Open current directory with compact layout"
+    echo "  zellij-workspace                       # Open current directory with default layout"
     echo "  zellij-workspace --layout regular      # Open current directory with regular layout"
-    echo "  zellij-workspace /path/to/project      # Open specific directory with compact layout"
+    echo "  ZK_DEFAULT_LAYOUT=regular zellij-workspace  # Use regular as default layout"
+    echo "  zellij-workspace /path/to/project      # Open specific directory with default layout"
     echo "  zellij-workspace --layout regular /path/to/project  # Open specific directory with regular layout"
 }
 
 # Main function
 main() {
-    local layout_type="compact"  # Default to compact
+    # Read default layout from environment variable, fallback to compact
+    local layout_type="${ZK_DEFAULT_LAYOUT:-compact}"
     local working_dir=""
     
     # Parse command line arguments

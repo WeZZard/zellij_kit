@@ -3,11 +3,14 @@
 # zellij-launch - Zellij session management function
 # Usage: zellij-launch [--layout regular|compact] [session_name]
 # Options:
-#   --layout regular|compact  Choose layout (default: compact)
+#   --layout regular|compact  Choose layout (default: from ZK_DEFAULT_LAYOUT env var or compact)
+# Environment Variables:
+#   ZK_DEFAULT_LAYOUT     Set default layout type (regular|compact, default: compact)
 # Examples:
-#   zellij-launch                       # Create/attach to 'master' session with compact layout
+#   zellij-launch                       # Create/attach to 'master' session with default layout
 #   zellij-launch --layout regular      # Create/attach to 'master' session with regular layout
-#   zellij-launch mysession             # Create/attach to 'mysession' with compact layout
+#   ZK_DEFAULT_LAYOUT=regular zellij-launch  # Use regular as default layout
+#   zellij-launch mysession             # Create/attach to 'mysession' with default layout
 #   zellij-launch --layout regular mysession  # Create/attach to 'mysession' with regular layout
 
 set -euo pipefail
@@ -49,13 +52,17 @@ for arg in "$@"; do
             echo "Usage: zellij-launch [--layout regular|compact] [session_name]"
             echo ""
             echo "Options:"
-            echo "  --layout regular|compact  Choose layout (default: compact)"
+            echo "  --layout regular|compact  Choose layout (default: from ZK_DEFAULT_LAYOUT env var or compact)"
             echo "  --help                    Show this help message"
             echo ""
+            echo "Environment Variables:"
+            echo "  ZK_DEFAULT_LAYOUT     Set default layout type (regular|compact, default: compact)"
+            echo ""
             echo "Examples:"
-            echo "  zellij-launch                       # Create/attach to 'master' session with compact layout"
+            echo "  zellij-launch                       # Create/attach to 'master' session with default layout"
             echo "  zellij-launch --layout regular      # Create/attach to 'master' session with regular layout"
-            echo "  zellij-launch mysession             # Create/attach to 'mysession' with compact layout"
+            echo "  ZK_DEFAULT_LAYOUT=regular zellij-launch  # Use regular as default layout"
+            echo "  zellij-launch mysession             # Create/attach to 'mysession' with default layout"
             echo "  zellij-launch --layout regular mysession  # Create/attach to 'mysession' with regular layout"
         }
         show_help
@@ -100,19 +107,24 @@ show_help() {
     echo "Usage: zellij-launch [--layout regular|compact] [session_name]"
     echo ""
     echo "Options:"
-    echo "  --layout regular|compact  Choose layout (default: compact)"
+    echo "  --layout regular|compact  Choose layout (default: from ZK_DEFAULT_LAYOUT env var or compact)"
     echo "  --help                    Show this help message"
     echo ""
+    echo "Environment Variables:"
+    echo "  ZK_DEFAULT_LAYOUT     Set default layout type (regular|compact, default: compact)"
+    echo ""
     echo "Examples:"
-    echo "  zellij-launch                       # Create/attach to 'master' session with compact layout"
+    echo "  zellij-launch                       # Create/attach to 'master' session with default layout"
     echo "  zellij-launch --layout regular      # Create/attach to 'master' session with regular layout"
-    echo "  zellij-launch mysession             # Create/attach to 'mysession' with compact layout"
+    echo "  ZK_DEFAULT_LAYOUT=regular zellij-launch  # Use regular as default layout"
+    echo "  zellij-launch mysession             # Create/attach to 'mysession' with default layout"
     echo "  zellij-launch --layout regular mysession  # Create/attach to 'mysession' with regular layout"
 }
 
 # Main function
 main() {
-    local layout_type="compact"  # Default to compact
+    # Read default layout from environment variable, fallback to compact
+    local layout_type="${ZK_DEFAULT_LAYOUT:-compact}"
     local session_name="master"  # Default session name
     
     # Parse command line arguments
