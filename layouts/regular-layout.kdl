@@ -42,9 +42,9 @@ layout {
     }
   }
   tab name="🏠" cwd="$HOME" {
-    pane stacked=true {
+    pane split_direction="vertical" {
       pane name="Claude" command="claude"
-      pane expanded=true name="Shell"
+      pane name="Shell" command="zsh"
     }
 		floating_panes {
 			pane name="Htop" {
