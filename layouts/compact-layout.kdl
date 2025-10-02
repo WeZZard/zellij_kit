@@ -19,9 +19,6 @@ layout {
       pane name="Claude" {
         command "claude"
       }
-      pane expanded=true name="Codex" {
-        command "codex"
-      }
     }
     floating_panes {
     	pane name="Yazi" {
