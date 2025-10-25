@@ -112,7 +112,7 @@ show_help() {
 
 # Main function
 main() {
-    local layout_type="compact"  # Default to compact
+    local layout_type="regular"  # Default to compact
     local session_name="master"  # Default session name
     
     # Parse command line arguments

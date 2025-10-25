@@ -4,27 +4,25 @@ layout {
   pane size=1 borderless=true {
     plugin location="zellij:tab-bar"
   }
-  pane split_direction="vertical" {
-    pane name="Agents" stacked=true {
-      pane name="Claude" command="claude"
+  pane stacked=true {
+    pane name="Shell" {
+      command "zsh"
     }
-    pane name="Explorer" stacked=true {
-      pane name="Yazi" {
-        command "zsh"
-        args "-lc" "yazi \"$PWD\""
-      }
+    pane expanded=true name="Claude" {
+      command "claude"
     }
   }
   pane size=2 borderless=true {
     plugin location="zellij:status-bar"
   }
   floating_panes {
-    pane {
+    pane name="Yazi" {
       command "zsh"
-      width "78%"
-      height "78%"
-      x "11%"
-      y "11%"
+      args "-lc" "yazi \"$PWD\""
+      width "90%"
+      height "90%"
+      x "5%"
+      y "5%"
     }
   }
 }

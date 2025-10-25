@@ -17,7 +17,7 @@ ZJ_LAYOUT_DIR="${ZJ_LAYOUT_DIR:-$HOME/zellij_kit/layouts}"
 
 # Function to determine the workspace layout based on type
 get_workspace_layout() {
-    local layout_type="${1:-compact}"  # Default to compact
+    local layout_type="${1:-regular}"  # Default to compact
     local regular_layout="${ZJ_LAYOUT_DIR}/regular-workspace-layout.kdl"
     local compact_layout="${ZJ_LAYOUT_DIR}/compact-workspace-layout.kdl"
     
