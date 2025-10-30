@@ -12,6 +12,11 @@
 
 set -euo pipefail
 
+# Check if already inside a Zellij session to prevent nesting
+if [[ -n "${ZELLIJ:-}" ]]; then
+    exit 1
+fi
+
 # Default layout directory
 ZJ_LAYOUT_DIR="${ZJ_LAYOUT_DIR:-$HOME/zellij_kit/layouts}"
 
