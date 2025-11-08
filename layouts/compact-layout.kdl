@@ -16,9 +16,10 @@ layout {
       pane name="Shell" {
         command "zsh"
 			}
-      pane expanded=true name="Claude" {
-        command "claude"
-      }
+      pane expanded=true name="Claude" command="claude"
+      pane name="Codex" command="codex"
+      pane name="Gemini" command="gemini"
+      pane name="Cursor" command="cursor-agent"
     }
     floating_panes {
     	pane name="Yazi" {
@@ -37,9 +38,10 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
       pane name="Shell"
-      pane expanded=true name="Claude" {
-        command "claude"
-      }
+      pane expanded=true name="Claude" command="claude"
+      pane name="Codex" command="codex"
+      pane name="Gemini" command="gemini"
+      pane name="Cursor" command="cursor-agent"
     }
     floating_panes {
       pane name="Activities" {

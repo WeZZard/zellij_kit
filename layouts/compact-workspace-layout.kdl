@@ -8,9 +8,10 @@ layout {
     pane name="Shell" {
       command "zsh"
     }
-    pane expanded=true name="Claude" {
-      command "claude"
-    }
+    pane expanded=true name="Claude" command="claude"
+    pane name="Codex" command="codex"
+    pane name="Gemini" command="gemini"
+    pane name="Cursor" command="cursor-agent"
   }
   pane size=2 borderless=true {
     plugin location="zellij:status-bar"
