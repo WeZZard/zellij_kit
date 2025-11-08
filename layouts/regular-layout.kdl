@@ -40,12 +40,20 @@ layout {
     }
   }
   tab name="🏠" cwd="$HOME" {
-    pane stacked=true {
-      pane name="Claude" command="claude"
-      pane name="Codex" command="codex"
-      pane name="Gemini" command="gemini"
-      pane name="Cursor" command="cursor-agent"
-      pane expanded=true name="Shell"
+    pane split_direction="vertical" {
+      pane name="Agents" stacked=true {
+        pane name="Claude" command="claude"
+        pane name="Codex" command="codex"
+        pane name="Gemini" command="gemini"
+        pane name="Cursor" command="cursor-agent"
+        pane expanded=true name="Shell"
+      }
+      pane name="Explorer" stacked=true {
+        pane expanded=true name="Yazi" {
+          command "zsh"
+          args "-lc" "yazi \"$PWD\""
+        }
+      }
     }
 		floating_panes {
 			pane name="Htop" {
