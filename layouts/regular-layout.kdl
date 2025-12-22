@@ -39,14 +39,38 @@ layout {
       }
     }
   }
+  tab_template name="dir_tab" {
+    pane size=1 borderless=true {
+      plugin location="zellij:tab-bar"
+    }
+    pane split_direction="vertical" {
+      pane name="Agents" stacked=true {
+        pane name="Gemini" command="gemini"
+      }
+      pane name="Explorer" stacked=true {
+        pane expanded=true name="Yazi" {
+          command "zsh"
+          args "-lc" "yazi \"$PWD\""
+        }
+      }
+    }
+    pane size=2 borderless=true {
+      plugin location="zellij:status-bar"
+    }
+		floating_panes {
+      pane name="Shell" {
+        command "zsh"
+				width "76%"
+				height "82%"
+				x "12%"
+				y "9%"
+      }
+    }
+  }
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
       pane name="Agents" stacked=true {
-        pane name="Claude" command="claude"
-        pane name="Codex" command="codex"
         pane name="Gemini" command="gemini"
-        pane name="Cursor" command="cursor-agent"
-        pane expanded=true name="Shell"
       }
       pane name="Explorer" stacked=true {
         pane expanded=true name="Yazi" {
@@ -66,7 +90,7 @@ layout {
 			}
     }
   }
-  workspace_tab name="📂" cwd="$HOME/Projects"
-  workspace_tab name="<>" cwd="$HOME/Repositories"
+  dir_tab name="📂" cwd="$HOME/Projects"
+  dir_tab name="<>" cwd="$HOME/Repositories"
   workspace_tab name="ADA" cwd="$HOME/Projects/ADA"
 }

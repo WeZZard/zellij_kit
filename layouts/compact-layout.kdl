@@ -17,9 +17,30 @@ layout {
         command "zsh"
 			}
       pane expanded=true name="Claude" command="claude"
-      pane name="Codex" command="codex"
-      pane name="Gemini" command="gemini"
-      pane name="Cursor" command="cursor-agent"
+    }
+    floating_panes {
+    	pane name="Yazi" {
+        command "zsh"
+        args "-lc" "yazi \"$PWD\""
+				width "90%"
+				height "90%"
+				x "5%"
+				y "5%"
+			}
+    }
+    pane size=2 borderless=true {
+      plugin location="zellij:status-bar"
+    }
+  }
+  tab_template name="dir_tab" {
+    pane size=1 borderless=true {
+      plugin location="zellij:tab-bar"
+    }
+    pane stacked=true {
+      pane name="Shell" {
+        command "zsh"
+			}
+      pane expanded=true name="Gemini" command="gemini"
     }
     floating_panes {
     	pane name="Yazi" {
@@ -38,10 +59,7 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
       pane name="Shell"
-      pane expanded=true name="Claude" command="claude"
-      pane name="Codex" command="codex"
       pane name="Gemini" command="gemini"
-      pane name="Cursor" command="cursor-agent"
     }
     floating_panes {
       pane name="Activities" {
@@ -53,7 +71,6 @@ layout {
 			}
    }
   }
-  workspace_tab name="📂" cwd="$HOME/Projects"
-  workspace_tab name="<>" cwd="$HOME/Repositories"
-  workspace_tab name="ADA" cwd="$HOME/Projects/ADA"
+  dir_tab name="📂" cwd="$HOME/Projects"
+  dir_tab name="<>" cwd="$HOME/Repositories"
 }

@@ -7,9 +7,6 @@ layout {
   pane split_direction="vertical" {
     pane name="Agents" stacked=true {
       pane name="Claude" command="claude"
-      pane name="Codex" command="codex"
-      pane name="Gemini" command="gemini"
-      pane name="Cursor" command="cursor-agent"
     }
     pane name="Explorer" stacked=true {
       pane name="Yazi" {
