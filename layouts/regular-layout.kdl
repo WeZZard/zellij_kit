@@ -45,7 +45,10 @@ layout {
     }
     pane split_direction="vertical" {
       pane name="Agents" stacked=true {
-        pane name="Gemini" command="gemini"
+        pane name="Gemini" {
+          command "gemini"
+          args "--sandbox" "--yolo"
+        }
       }
       pane name="Explorer" stacked=true {
         pane expanded=true name="Yazi" {
@@ -70,7 +73,10 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
       pane name="Agents" stacked=true {
-        pane name="Gemini" command="gemini"
+        pane name="Gemini" {
+          command "gemini"
+          args "--sandbox" "--yolo"
+        }
       }
       pane name="Explorer" stacked=true {
         pane expanded=true name="Yazi" {

@@ -18,7 +18,8 @@ if [[ -n "${ZELLIJ:-}" ]]; then
 fi
 
 # Default layout directory
-ZJ_LAYOUT_DIR="${ZJ_LAYOUT_DIR:-$HOME/zellij_kit/layouts}"
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+ZJ_LAYOUT_DIR="${ZJ_LAYOUT_DIR:-${script_dir}/../layouts}"
 
 # Function to determine the layout based on type
 get_layout() {

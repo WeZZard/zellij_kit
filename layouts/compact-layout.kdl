@@ -40,7 +40,10 @@ layout {
       pane name="Shell" {
         command "zsh"
 			}
-      pane expanded=true name="Gemini" command="gemini"
+      pane expanded=true name="Gemini" {
+        command "gemini"
+        args "--sandbox" "--yolo"
+      }
     }
     floating_panes {
     	pane name="Yazi" {
@@ -59,7 +62,10 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
       pane name="Shell"
-      pane name="Gemini" command="gemini"
+      pane name="Gemini" {
+        command "gemini"
+        args "--sandbox" "--yolo"
+      }
     }
     floating_panes {
       pane name="Activities" {
