@@ -8,64 +8,10 @@ layout {
       plugin location="zellij:status-bar"
     }
   }
-  tab_template name="workspace_tab" {
-    pane size=1 borderless=true {
-      plugin location="zellij:tab-bar"
-    }
-    pane stacked=true {
-      pane name="Shell" {
-        command "zsh"
-			}
-      pane expanded=true name="Claude" command="claude"
-    }
-    floating_panes {
-    	pane name="Yazi" {
-        command "zsh"
-        args "-lc" "yazi \"$PWD\""
-				width "90%"
-				height "90%"
-				x "5%"
-				y "5%"
-			}
-    }
-    pane size=2 borderless=true {
-      plugin location="zellij:status-bar"
-    }
-  }
-  tab_template name="dir_tab" {
-    pane size=1 borderless=true {
-      plugin location="zellij:tab-bar"
-    }
-    pane stacked=true {
-      pane name="Shell" {
-        command "zsh"
-			}
-      pane expanded=true name="Gemini" {
-        command "gemini"
-        args "--sandbox" "--yolo"
-      }
-    }
-    floating_panes {
-    	pane name="Yazi" {
-        command "zsh"
-        args "-lc" "yazi \"$PWD\""
-				width "90%"
-				height "90%"
-				x "5%"
-				y "5%"
-			}
-    }
-    pane size=2 borderless=true {
-      plugin location="zellij:status-bar"
-    }
-  }
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
       pane name="Shell"
-      pane name="Gemini" {
-        command "gemini"
-        args "--sandbox" "--yolo"
-      }
+      pane name="Claude" command="claude"
     }
     floating_panes {
       pane name="Activities" {
@@ -77,6 +23,4 @@ layout {
 			}
    }
   }
-  dir_tab name="📂" cwd="$HOME/Projects"
-  dir_tab name="<>" cwd="$HOME/Repositories"
 }
