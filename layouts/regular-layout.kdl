@@ -20,15 +20,15 @@ layout {
         }
       }
     }
-		floating_panes {
-			pane name="Htop" {
-				floating false 
+    floating_panes {
+      pane name="Htop" {
+        floating false
         command "htop"
-				width "76%"
-				height "82%"
-				x "12%"
-				y "9%"
-			}
+        width "76%"
+        height "82%"
+        x "12%"
+        y "9%"
+      }
     }
   }
 }

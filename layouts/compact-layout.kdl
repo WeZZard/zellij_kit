@@ -15,12 +15,12 @@ layout {
     }
     floating_panes {
       pane name="Activities" {
-				command "htop"
-				width "90%"
-				height "90%"
-				x "5%"
-				y "5%"
-			}
-   }
+        command "htop"
+        width "90%"
+        height "90%"
+        x "5%"
+        y "5%"
+      }
+    }
   }
 }
