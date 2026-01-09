@@ -1,126 +1,76 @@
-#!/bin/bash
+#!/bin/zsh
 
-# zellij-launch - Zellij session management function
+# zellij-launch - Zellij session management
 # Usage: zellij-launch [--layout regular|compact] [session_name]
 # Options:
-#   --layout regular|compact  Choose layout (default: compact)
+#   --layout regular|compact  Choose layout (default: regular)
 # Examples:
-#   zellij-launch                       # Create/attach to 'master' session with compact layout
-#   zellij-launch --layout regular      # Create/attach to 'master' session with regular layout
-#   zellij-launch mysession             # Create/attach to 'mysession' with compact layout
-#   zellij-launch --layout regular mysession  # Create/attach to 'mysession' with regular layout
+#   zellij-launch                       # Create/attach to 'master' session with regular layout
+#   zellij-launch --layout compact      # Create/attach to 'master' session with compact layout
+#   zellij-launch mysession             # Create/attach to 'mysession' with regular layout
+#   zellij-launch --layout compact mysession  # Create/attach to 'mysession' with compact layout
 
 set -euo pipefail
 
-# Check if already inside a Zellij session to prevent nesting
-if [[ -n "${ZELLIJ:-}" ]]; then
-    exit 1
-fi
-
-# Default layout directory
-script_dir="$(cd "$(dirname "$0")" && pwd)"
-ZJ_LAYOUT_DIR="${ZJ_LAYOUT_DIR:-${script_dir}/../layouts}"
-
-# Function to determine the layout based on type
-get_layout() {
-    local layout_type="${1:-compact}"  # Default to compact
-    local regular_layout="${ZJ_LAYOUT_DIR}/regular-layout.kdl"
-    local compact_layout="${ZJ_LAYOUT_DIR}/compact-layout.kdl"
-    
-    case "${layout_type}" in
-        "regular")
-            if [[ -f "${regular_layout}" ]]; then
-                echo "${regular_layout}"
-            else
-                echo ""
-            fi
-            ;;
-        "compact")
-            if [[ -f "${compact_layout}" ]]; then
-                echo "${compact_layout}"
-            else
-                echo ""
-            fi
-            ;;
-        *)
-            echo ""
-            ;;
-    esac
-}
-
-# Early check for help option (before zellij check)
-for arg in "$@"; do
-    if [[ "$arg" == "--help" ]] || [[ "$arg" == "-h" ]]; then
-        show_help() {
-            echo "Usage: zellij-launch [--layout regular|compact] [session_name]"
-            echo ""
-            echo "Options:"
-            echo "  --layout regular|compact  Choose layout (default: compact)"
-            echo "  --help                    Show this help message"
-            echo ""
-            echo "Examples:"
-            echo "  zellij-launch                       # Create/attach to 'master' session with compact layout"
-            echo "  zellij-launch --layout regular      # Create/attach to 'master' session with regular layout"
-            echo "  zellij-launch mysession             # Create/attach to 'mysession' with compact layout"
-            echo "  zellij-launch --layout regular mysession  # Create/attach to 'mysession' with regular layout"
-        }
-        show_help
-        exit 0
-    fi
-done
-
-# Check if zellij is installed
-if ! command -v zellij &> /dev/null; then
-    echo "Error: zellij is not installed or not in PATH"
-    exit 1
-fi
-
-# Function to create new session or attach to existing one
-zj_session() {
-    local session_name="$1"
-    local layout_path="$2"
-    
-    # Resolve layout path - check if it's just a filename in our layouts directory
-    if [[ -n "${layout_path}" ]] && [[ ! "${layout_path}" =~ ^/ ]] && [[ -f "${ZJ_LAYOUT_DIR}/${layout_path}" ]]; then
-        layout_path="${ZJ_LAYOUT_DIR}/${layout_path}"
-    fi
-    
-    if zellij list-sessions 2>/dev/null | grep "${session_name}"; then
-        echo "Attaching to existing session: ${session_name}"
-        zellij attach "${session_name}"
-        return 0
-    else
-        echo "Creating new session: ${session_name}"
-        if [[ -n "${layout_path}" ]] && [[ -f "${layout_path}" ]]; then
-            zellij  --new-session-with-layout "${layout_path}" --session "${session_name}"
-            return 0
-        else
-            echo "No layout file not found: ${layout_path}"
-            return 1
-        fi
-    fi
-}
+# Source shared functions
+ZJ_SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${ZJ_SCRIPT_DIR}/zellij-common.zsh"
 
 # Function to show help
 show_help() {
     echo "Usage: zellij-launch [--layout regular|compact] [session_name]"
     echo ""
     echo "Options:"
-    echo "  --layout regular|compact  Choose layout (default: compact)"
-    echo "  --help                    Show this help message"
+    echo "  --layout regular|compact  Choose layout (default: regular)"
+    echo "  --help, -h                Show this help message"
     echo ""
     echo "Examples:"
-    echo "  zellij-launch                       # Create/attach to 'master' session with compact layout"
-    echo "  zellij-launch --layout regular      # Create/attach to 'master' session with regular layout"
-    echo "  zellij-launch mysession             # Create/attach to 'mysession' with compact layout"
-    echo "  zellij-launch --layout regular mysession  # Create/attach to 'mysession' with regular layout"
+    echo "  zellij-launch                       # Create/attach to 'master' session with regular layout"
+    echo "  zellij-launch --layout compact      # Create/attach to 'master' session with compact layout"
+    echo "  zellij-launch mysession             # Create/attach to 'mysession' with regular layout"
+    echo "  zellij-launch --layout compact mysession  # Create/attach to 'mysession' with compact layout"
+}
+
+# Check for help option early
+for arg in "$@"; do
+    if [[ "$arg" == "--help" ]] || [[ "$arg" == "-h" ]]; then
+        show_help
+        exit 0
+    fi
+done
+
+# Check if already inside a Zellij session to prevent nesting
+if [[ -n "${ZELLIJ:-}" ]]; then
+    exit 0
+fi
+
+# Check if zellij is installed
+check_zellij_installed || exit 1
+
+# Function to create new session or attach to existing one
+zj_session() {
+    local session_name="$1"
+    local layout_path="$2"
+
+    if zellij list-sessions --no-formatting 2>/dev/null | grep -q "^${session_name} "; then
+        echo "Attaching to existing session: ${session_name}"
+        zellij attach "${session_name}"
+    else
+        echo "Creating new session: ${session_name}"
+        if [[ -n "${layout_path}" ]] && [[ -f "${layout_path}" ]]; then
+            zellij --new-session-with-layout "${layout_path}" --session "${session_name}"
+        else
+            echo "Error: Layout file not found: ${layout_path}"
+            return 1
+        fi
+    fi
 }
 
 # Main function
 main() {
-    local layout_type="regular"  # Default to compact
-    local session_name="master"  # Default session name
-    
+    local layout_type="regular"
+    local session_name="master"
+
     # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -144,27 +94,24 @@ main() {
                 exit 1
                 ;;
             *)
-                # This should be the session name
                 session_name="$1"
                 shift
                 ;;
         esac
     done
-    
+
     # Get the layout path based on the selected type
     local layout_path
-    layout_path=$(get_layout "${layout_type}")
-    
+    layout_path=$(get_layout "${layout_type}" "session")
+
     if [[ -z "${layout_path}" ]] || [[ ! -f "${layout_path}" ]]; then
         echo "Error: ${layout_type} layout not found in ${ZJ_LAYOUT_DIR}"
         echo "Expected file: ${layout_type}-layout.kdl"
         exit 1
     fi
-    
+
     # Create or attach to session
     zj_session "${session_name}" "${layout_path}"
-    return $?
 }
 
 main "$@"
-exit $?
