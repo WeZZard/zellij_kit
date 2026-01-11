@@ -11,7 +11,7 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
       pane name="Shell"
-      pane command="happy"
+      pane command="claude"
     }
     floating_panes {
       pane name="Activities" {

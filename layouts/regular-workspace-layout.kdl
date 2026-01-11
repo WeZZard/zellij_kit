@@ -6,7 +6,7 @@ layout {
   }
   pane split_direction="vertical" {
     pane name="Agents" stacked=true {
-      pane expanded=true command="happy"
+      pane expanded=true command="claude"
     }
     pane name="Explorer" stacked=true {
       pane name="Yazi" {
