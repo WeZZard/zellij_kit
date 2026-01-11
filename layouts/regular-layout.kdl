@@ -11,7 +11,7 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
       pane name="Agents" stacked=true {
-        pane name="Claude" command="claude"
+        pane command="happy"
       }
       pane name="Explorer" stacked=true {
         pane expanded=true name="Yazi" {
