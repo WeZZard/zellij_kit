@@ -51,6 +51,7 @@ check_zellij_installed || exit 1
 zj_session() {
     local session_name="$1"
     local layout_path="$2"
+    local layout_type="$3"
 
     if zellij list-sessions --no-formatting 2>/dev/null | grep -q "^${session_name} "; then
         echo "Attaching to existing session: ${session_name}"
@@ -58,6 +59,7 @@ zj_session() {
     else
         echo "Creating new session: ${session_name}"
         if [[ -n "${layout_path}" ]] && [[ -f "${layout_path}" ]]; then
+            export ZJ_SESSION_LAYOUT="${layout_type}"
             zellij --new-session-with-layout "${layout_path}" --session "${session_name}"
         else
             echo "Error: Layout file not found: ${layout_path}"
@@ -111,7 +113,7 @@ main() {
     fi
 
     # Create or attach to session
-    zj_session "${session_name}" "${layout_path}"
+    zj_session "${session_name}" "${layout_path}" "${layout_type}"
 }
 
 main "$@"
