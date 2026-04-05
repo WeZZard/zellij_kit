@@ -28,7 +28,7 @@ layouts/       # KDL layout files for Zellij
   ```bash
   zellij-workspace [--layout regular|compact] [working_directory]
   ```
-  Default: `--layout compact`, current directory
+  Default: `--layout regular`, current directory
 
 ## Layouts
 

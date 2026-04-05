@@ -44,7 +44,7 @@ zellij-workspace [--layout regular|compact] [working_directory]
 ```
 
 **Examples:**
-- `zellij-workspace` - Open tab in current directory with compact layout
+- `zellij-workspace` - Open tab in current directory with regular layout
 - `zellij-workspace --layout regular` - Use regular layout
 - `zellij-workspace ~/Projects/myapp` - Open specific directory
 - `zellij-workspace --layout regular ~/Projects/myapp` - Regular layout in specific directory

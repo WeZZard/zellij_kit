@@ -3,7 +3,7 @@
 # zellij-workspace - Open a new zellij tab with workspace layout in specified directory
 # Usage: zellij-workspace [--layout regular|compact] [working_directory]
 # Options:
-#   --layout regular|compact  Choose workspace layout (default: inherits from session, or compact)
+#   --layout regular|compact  Choose workspace layout (default: inherits from session, or regular)
 # Examples:
 #   zellij-workspace                    # Use session's layout in current directory
 #   zellij-workspace --layout regular   # Use regular layout in current directory
@@ -21,7 +21,7 @@ show_help() {
     echo "Usage: zellij-workspace [--layout regular|compact] [working_directory]"
     echo ""
     echo "Options:"
-    echo "  --layout regular|compact  Choose workspace layout (default: inherits from session, or compact)"
+    echo "  --layout regular|compact  Choose workspace layout (default: inherits from session, or regular)"
     echo "  --help, -h                Show this help message"
     echo ""
     echo "Examples:"
@@ -78,7 +78,7 @@ open_tab_with_layout() {
 
 # Main function
 main() {
-    local layout_type="${ZJ_SESSION_LAYOUT:-compact}"
+    local layout_type="${ZJ_SESSION_LAYOUT:-regular}"
     local working_dir=""
 
     # Parse command line arguments
