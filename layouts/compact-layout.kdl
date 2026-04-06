@@ -10,12 +10,10 @@ layout {
   }
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
-      pane name="Shell"
       pane command="claude"
     }
     floating_panes {
-      pane name="Activities" {
-        command "htop"
+      pane name="Shell" {
         width "90%"
         height "90%"
         x "5%"
