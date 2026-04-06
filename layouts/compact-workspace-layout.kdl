@@ -13,7 +13,6 @@ layout {
   floating_panes {
     pane name="Yazi" {
       command "zsh"
-      args "-lc" "yazi \"$PWD\""
       width "90%"
       height "90%"
       x "5%"
