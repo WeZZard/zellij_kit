@@ -22,13 +22,13 @@ layouts/       # KDL layout files for Zellij
   ```bash
   zellij-launch [--layout regular|compact] [session_name]
   ```
-  Default: `--layout regular`, session name `master`
+  Default: `$ZJ_DEFAULT_LAYOUT` (`compact` unless overridden), session name `master`
 
 - **zellij-workspace**: Opens a new tab in an existing Zellij session (must run inside Zellij)
   ```bash
   zellij-workspace [--layout regular|compact] [working_directory]
   ```
-  Default: `--layout regular`, current directory
+  Default: current session layout or `$ZJ_DEFAULT_LAYOUT` (`compact` unless overridden), current directory
 
 ## Layouts
 
@@ -41,6 +41,7 @@ Layout files use KDL format and are located relative to scripts via `$ZJ_LAYOUT_
 
 ## Environment Variables
 
+- `ZJ_DEFAULT_LAYOUT`: Default layout for `zellij-launch` and fallback default for `zellij-workspace`; valid values are `regular` and `compact` (default: `compact`)
 - `ZJ_LAYOUT_DIR`: Override default layouts directory (default: `../layouts` relative to script)
 
 ## Development Notes

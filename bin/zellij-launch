@@ -3,11 +3,11 @@
 # zellij-launch - Zellij session management
 # Usage: zellij-launch [--layout regular|compact] [session_name]
 # Options:
-#   --layout regular|compact  Choose layout (default: regular)
+#   --layout regular|compact  Choose layout (default: ZJ_DEFAULT_LAYOUT)
 # Examples:
-#   zellij-launch                       # Create/attach to 'master' session with regular layout
+#   zellij-launch                       # Create/attach to 'master' session with default layout
 #   zellij-launch --layout compact      # Create/attach to 'master' session with compact layout
-#   zellij-launch mysession             # Create/attach to 'mysession' with regular layout
+#   zellij-launch mysession             # Create/attach to 'mysession' with default layout
 #   zellij-launch --layout compact mysession  # Create/attach to 'mysession' with compact layout
 
 set -euo pipefail
@@ -21,13 +21,13 @@ show_help() {
     echo "Usage: zellij-launch [--layout regular|compact] [session_name]"
     echo ""
     echo "Options:"
-    echo "  --layout regular|compact  Choose layout (default: regular)"
+    echo "  --layout regular|compact  Choose layout (default: ${ZJ_DEFAULT_LAYOUT:-compact})"
     echo "  --help, -h                Show this help message"
     echo ""
     echo "Examples:"
-    echo "  zellij-launch                       # Create/attach to 'master' session with regular layout"
+    echo "  zellij-launch                       # Create/attach to 'master' session with default layout"
     echo "  zellij-launch --layout compact      # Create/attach to 'master' session with compact layout"
-    echo "  zellij-launch mysession             # Create/attach to 'mysession' with regular layout"
+    echo "  zellij-launch mysession             # Create/attach to 'mysession' with default layout"
     echo "  zellij-launch --layout compact mysession  # Create/attach to 'mysession' with compact layout"
 }
 
@@ -70,14 +70,14 @@ zj_session() {
 
 # Main function
 main() {
-    local layout_type="regular"
+    local layout_type=""
     local session_name="master"
 
     # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
             --layout)
-                if [[ -n "${2:-}" ]] && [[ "$2" =~ ^(regular|compact)$ ]]; then
+                if [[ -n "${2:-}" ]] && is_valid_layout_type "$2"; then
                     layout_type="$2"
                     shift 2
                 else
@@ -101,6 +101,10 @@ main() {
                 ;;
         esac
     done
+
+    if [[ -z "${layout_type}" ]]; then
+        layout_type=$(get_default_layout) || exit 1
+    fi
 
     # Get the layout path based on the selected type
     local layout_path

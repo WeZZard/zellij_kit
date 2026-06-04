@@ -6,13 +6,31 @@
 # Resolve layout directory relative to the sourcing script
 : ${ZJ_SCRIPT_DIR:="$(cd "$(dirname "${(%):-%x}")" && pwd)"}
 : ${ZJ_LAYOUT_DIR:="${ZJ_SCRIPT_DIR}/../layouts"}
+: ${ZJ_DEFAULT_LAYOUT:="compact"}
+
+# Check whether a layout type is supported
+is_valid_layout_type() {
+    [[ "${1:-}" =~ ^(regular|compact)$ ]]
+}
+
+# Get the configured default layout type
+get_default_layout() {
+    local layout_type="${ZJ_DEFAULT_LAYOUT:-compact}"
+
+    if is_valid_layout_type "${layout_type}"; then
+        echo "${layout_type}"
+    else
+        echo "Error: ZJ_DEFAULT_LAYOUT must be 'regular' or 'compact' (got '${layout_type}')" >&2
+        return 1
+    fi
+}
 
 # Function to determine the layout path based on type and variant
 # Usage: get_layout <type> [variant]
-#   type: "regular" or "compact"
+#   type: "regular" or "compact" (default: ZJ_DEFAULT_LAYOUT)
 #   variant: "session" (default) or "workspace"
 get_layout() {
-    local layout_type="${1:-regular}"
+    local layout_type="${1:-${ZJ_DEFAULT_LAYOUT}}"
     local variant="${2:-session}"
     local layout_file
 

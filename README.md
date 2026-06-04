@@ -30,9 +30,9 @@ zellij-launch [--layout regular|compact] [session_name]
 ```
 
 **Examples:**
-- `zellij-launch` - Create/attach to 'master' session with regular layout
+- `zellij-launch` - Create/attach to 'master' session with the default layout
 - `zellij-launch --layout compact` - Use compact layout
-- `zellij-launch mysession` - Custom session name
+- `zellij-launch mysession` - Custom session name with the default layout
 - `zellij-launch --layout compact dev` - Compact layout with 'dev' session
 
 ### zellij-workspace
@@ -44,9 +44,9 @@ zellij-workspace [--layout regular|compact] [working_directory]
 ```
 
 **Examples:**
-- `zellij-workspace` - Open tab in current directory with regular layout
+- `zellij-workspace` - Open tab in current directory with the session/default layout
 - `zellij-workspace --layout regular` - Use regular layout
-- `zellij-workspace ~/Projects/myapp` - Open specific directory
+- `zellij-workspace ~/Projects/myapp` - Open specific directory with the session/default layout
 - `zellij-workspace --layout regular ~/Projects/myapp` - Regular layout in specific directory
 
 ## Layouts
@@ -69,7 +69,14 @@ Each layout has a session variant (for `zellij-launch`) and a workspace variant 
 
 | Variable | Description | Default |
 |----------|-------------|---------|
+| `ZJ_DEFAULT_LAYOUT` | Default layout for `zellij-launch` and fallback default for `zellij-workspace`. Valid values: `regular`, `compact`. | `compact` |
 | `ZJ_LAYOUT_DIR` | Override layouts directory | `../layouts` relative to scripts |
+
+To use `regular` as the default layout for both commands, add this to your shell config:
+
+```bash
+export ZJ_DEFAULT_LAYOUT=regular
+```
 
 ## Requirements
 
