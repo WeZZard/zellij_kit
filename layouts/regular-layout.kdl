@@ -10,30 +10,27 @@ layout {
   }
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
-      pane name="Control" stacked=true {
+      pane name="Control" stacked=true size="62%" {
         pane {
           command "zsh"
           args "-ilc" "opencode"
         }
       }
       pane name="Dashboard" split_direction="horizontal" {
-        pane name="Apps" stacked=true {
+        pane name="Apps" stacked=true size="50%" {
           pane expanded=true name="Email" {
             command "zsh"
             args "-ilc" "alot"
           }
         }
-        pane name="Dashboard" stacked=true {
-          pane name="System" {
-            command "zsh"
-            args "-ilc" "btop --preset 2"
-          }
+        pane name="System" {
+          command "zsh"
+          args "-ilc" "btop --preset 2"
         }
       }
     }
     floating_panes {
       pane name="Shell" {
-        floating false
         command "zsh"
         args "-l"
         width "76%"
