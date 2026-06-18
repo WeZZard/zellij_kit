@@ -6,7 +6,7 @@
 # Resolve layout directory relative to the sourcing script
 : ${ZJ_SCRIPT_DIR:="$(cd "$(dirname "${(%):-%x}")" && pwd)"}
 : ${ZJ_LAYOUT_DIR:="${ZJ_SCRIPT_DIR}/../layouts"}
-: ${ZJ_DEFAULT_LAYOUT:="compact"}
+: ${ZJ_DEFAULT_LAYOUT:="regular"}
 
 # Check whether a layout type is supported
 is_valid_layout_type() {
@@ -15,7 +15,7 @@ is_valid_layout_type() {
 
 # Get the configured default layout type
 get_default_layout() {
-    local layout_type="${ZJ_DEFAULT_LAYOUT:-compact}"
+    local layout_type="${ZJ_DEFAULT_LAYOUT:-regular}"
 
     if is_valid_layout_type "${layout_type}"; then
         echo "${layout_type}"

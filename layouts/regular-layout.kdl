@@ -10,20 +10,32 @@ layout {
   }
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
-      pane name="Agents" stacked=true {
-        pane command="claude"
-      }
-      pane name="Explorer" stacked=true {
-        pane expanded=true name="Yazi" {
+      pane name="Control" stacked=true {
+        pane {
           command "zsh"
-          args "-lc" "yazi \"$PWD\""
+          args "-ilc" "opencode"
+        }
+      }
+      pane name="Dashboard" split_direction="horizontal" {
+        pane name="Apps" stacked=true {
+          pane expanded=true name="Email" {
+            command "zsh"
+            args "-ilc" "alot"
+          }
+        }
+        pane name="Dashboard" stacked=true {
+          pane name="System" {
+            command "zsh"
+            args "-ilc" "btop --preset 2"
+          }
         }
       }
     }
     floating_panes {
-      pane name="Htop" {
+      pane name="Shell" {
         floating false
-        command "htop"
+        command "zsh"
+        args "-l"
         width "76%"
         height "82%"
         x "12%"

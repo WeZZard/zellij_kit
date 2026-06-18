@@ -12,9 +12,13 @@ layout {
       }
     }
     pane name="Explorer" stacked=true {
-      pane name="Yazi" {
+      pane {
         command "zsh"
         args "-lc" "yazi \"$PWD\""
+      }
+      pane name="revdiff" {
+        command "zsh"
+        args "-lc" "revdiff \"$PWD\""
       }
     }
   }
