@@ -14,7 +14,7 @@ layout {
     pane name="Review" stacked=true {
       pane name="revdiff" {
         command "zsh"
-        args "-lc" "revdiff \"$PWD\""
+        args "-lc" "revdiff"
       }
     }
   }
