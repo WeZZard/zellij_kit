@@ -17,15 +17,15 @@ layout {
         }
       }
       pane name="Dashboard" split_direction="horizontal" {
-        pane name="Apps" stacked=true size="50%" {
+        pane name="Context" stacked=true size="50%" {
           pane name="AGENTS.md" {
             command "zsh"
             args "-ilc" "vim $HOME/CLAUDE.md"
           }
-          pane expanded=true name="Email" {
+          /* pane expanded=true name="Email" {
             command "zsh"
             args "-ilc" "alot"
-          }
+          } */
         }
         pane name="System" {
           command "zsh"
