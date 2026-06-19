@@ -7,6 +7,7 @@
 : ${ZJ_SCRIPT_DIR:="$(cd "$(dirname "${(%):-%x}")" && pwd)"}
 : ${ZJ_LAYOUT_DIR:="${ZJ_SCRIPT_DIR}/../layouts"}
 : ${ZJ_DEFAULT_LAYOUT:="regular"}
+: ${ZJ_ZELLIJ_BIN:="zellij"}
 
 # Check whether a layout type is supported
 is_valid_layout_type() {
@@ -49,7 +50,7 @@ get_layout() {
 
 # Check if zellij is installed
 check_zellij_installed() {
-    if ! command -v zellij &> /dev/null; then
+    if ! command -v "${ZJ_ZELLIJ_BIN}" &> /dev/null; then
         echo "Error: zellij is not installed or not in PATH"
         return 1
     fi

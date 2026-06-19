@@ -5,7 +5,7 @@ layout {
     plugin location="zellij:tab-bar"
   }
   pane split_direction="vertical" {
-    pane name="Agents" stacked=true {
+    pane name="Agents" stacked=true size="62%" {
       pane expanded=true {
         command "zsh"
         args "-lc" "claude"

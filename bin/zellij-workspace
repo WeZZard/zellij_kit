@@ -69,10 +69,10 @@ open_tab_with_layout() {
     # Change to the specified working directory if provided and valid
     if [[ -n "${working_dir}" ]] && [[ -d "${working_dir}" ]]; then
         echo "Opening new tab '${tab_name}' in directory: ${working_dir}"
-        zellij action new-tab --layout "${layout_path}" --cwd "${working_dir}" --name "${tab_name}"
+        ${ZJ_ZELLIJ_BIN} action new-tab --layout "${layout_path}" --cwd "${working_dir}" --name "${tab_name}"
     else
         echo "Opening new tab '${tab_name}' in current directory"
-        zellij action new-tab --layout "${layout_path}" --name "${tab_name}"
+        ${ZJ_ZELLIJ_BIN} action new-tab --layout "${layout_path}" --name "${tab_name}"
     fi
 }
 

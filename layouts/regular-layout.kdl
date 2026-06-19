@@ -18,6 +18,10 @@ layout {
       }
       pane name="Dashboard" split_direction="horizontal" {
         pane name="Apps" stacked=true size="50%" {
+          pane name="AGENTS.md" {
+            command "zsh"
+            args "-ilc" "vim $HOME/CLAUDE.md"
+          }
           pane expanded=true name="Email" {
             command "zsh"
             args "-ilc" "alot"
@@ -26,6 +30,44 @@ layout {
         pane name="System" {
           command "zsh"
           args "-ilc" "btop --preset 2"
+        }
+      }
+    }
+    floating_panes {
+      pane name="Shell" {
+        command "zsh"
+        args "-l"
+        width "76%"
+        height "82%"
+        x "12%"
+        y "9%"
+      }
+    }
+  }
+  tab name="🧰" cwd="$HOME/Artifacts/Repositories/com.github/WeZZard/skills/" {
+    pane split_direction="vertical" {
+      pane name="Edit" stacked=true size="62%" {
+        pane name="vim" {
+          command "zsh"
+          args "-ilc" "vim $HOME/Artifacts/Repositories/com.github/WeZZard/skills/"
+        }
+        pane name="revdiff" {
+          command "zsh"
+          args "-ilc" "revdiff"
+        }
+      }
+      pane name="Agents" stacked=true {
+        pane expanded=true {
+          command "zsh"
+          args "-ilc" "claude"
+        }
+        pane {
+          command "zsh"
+          args "-ilc" "codex"
+        }
+        pane {
+          command "zsh"
+          args "-ilc" "opencode"
         }
       }
     }

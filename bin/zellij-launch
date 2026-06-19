@@ -53,14 +53,14 @@ zj_session() {
     local layout_path="$2"
     local layout_type="$3"
 
-    if zellij list-sessions --no-formatting 2>/dev/null | grep -q "^${session_name} "; then
+    if ${ZJ_ZELLIJ_BIN} list-sessions --no-formatting 2>/dev/null | grep -q "^${session_name} "; then
         echo "Attaching to existing session: ${session_name}"
-        zellij attach "${session_name}"
+        ${ZJ_ZELLIJ_BIN} attach "${session_name}"
     else
         echo "Creating new session: ${session_name}"
         if [[ -n "${layout_path}" ]] && [[ -f "${layout_path}" ]]; then
             export ZJ_SESSION_LAYOUT="${layout_type}"
-            zellij --new-session-with-layout "${layout_path}" --session "${session_name}"
+            ${ZJ_ZELLIJ_BIN} --new-session-with-layout "${layout_path}" --session "${session_name}"
         else
             echo "Error: Layout file not found: ${layout_path}"
             return 1
