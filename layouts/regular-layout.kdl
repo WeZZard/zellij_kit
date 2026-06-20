@@ -10,27 +10,31 @@ layout {
   }
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
-      pane name="Control" stacked=true size="62%" {
+      pane name="Control" stacked=true size="50%" {
         pane {
           command "zsh"
           args "-ilc" "opencode"
         }
       }
       pane name="Dashboard" split_direction="horizontal" {
-        pane name="Context" stacked=true size="50%" {
+        pane name="vim" {
+          command "zsh"
+          args "-ilc" "vim $HOME"
+        }
+        /* pane name="Context" stacked=true size="50%" {
           pane name="AGENTS.md" {
             command "zsh"
             args "-ilc" "vim $HOME/CLAUDE.md"
           }
-          /* pane expanded=true name="Email" {
+          pane expanded=true name="Email" {
             command "zsh"
             args "-ilc" "alot"
-          } */
+          }
         }
         pane name="System" {
           command "zsh"
           args "-ilc" "btop --preset 2"
-        }
+        } */
       }
     }
     floating_panes {
@@ -46,7 +50,7 @@ layout {
   }
   tab name="🧰" cwd="$HOME/Artifacts/Repositories/com.github/WeZZard/skills/" {
     pane split_direction="vertical" {
-      pane name="Edit" stacked=true size="62%" {
+      pane name="Edit" stacked=true size="50%" {
         pane name="vim" {
           command "zsh"
           args "-ilc" "vim $HOME/Artifacts/Repositories/com.github/WeZZard/skills/"
