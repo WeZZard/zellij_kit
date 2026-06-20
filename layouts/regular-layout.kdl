@@ -11,11 +11,11 @@ layout {
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
       pane stacked=true split_direction="horizontal" {
-        pane name="vim" {
+        pane expanded=true name="vim" {
           command "zsh"
           args "-ilc" "vim $HOME"
         }
-        pane expanded=true name="Email" {
+        pane name="Email" {
           command "zsh"
           args "-ilc" "alot"
         }
