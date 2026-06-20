@@ -10,31 +10,21 @@ layout {
   }
   tab name="🏠" cwd="$HOME" {
     pane split_direction="vertical" {
-      pane name="Control" stacked=true size="50%" {
-        pane {
-          command "zsh"
-          args "-ilc" "opencode"
-        }
-      }
-      pane name="Dashboard" split_direction="horizontal" {
+      pane stacked=true split_direction="horizontal" {
         pane name="vim" {
           command "zsh"
           args "-ilc" "vim $HOME"
         }
-        /* pane name="Context" stacked=true size="50%" {
-          pane name="AGENTS.md" {
-            command "zsh"
-            args "-ilc" "vim $HOME/CLAUDE.md"
-          }
-          pane expanded=true name="Email" {
-            command "zsh"
-            args "-ilc" "alot"
-          }
-        }
-        pane name="System" {
+        pane expanded=true name="Email" {
           command "zsh"
-          args "-ilc" "btop --preset 2"
-        } */
+          args "-ilc" "alot"
+        }
+      }
+      pane stacked=true size="50%" {
+        pane {
+          command "zsh"
+          args "-ilc" "opencode"
+        }
       }
     }
     floating_panes {
