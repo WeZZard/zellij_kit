@@ -10,7 +10,22 @@ layout {
   }
   tab name="🏠" cwd="$HOME" {
     pane stacked=true {
+      pane command="opencode"
+    }
+    floating_panes {
+      pane name="Shell" {
+        width "90%"
+        height "90%"
+        x "5%"
+        y "5%"
+      }
+    }
+  }
+  tab name="🧰" cwd="$HOME" {
+    pane stacked=true {
       pane command="claude"
+      pane command="codex"
+      pane command="opencode"
     }
     floating_panes {
       pane name="Shell" {
